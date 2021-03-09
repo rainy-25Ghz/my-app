@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
+import './global.css';
+import Carousel from "./components/carousel"
+const testSrcs = [
+  "https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg",
+  "https://docs.microsoft.com/zh-cn/microsoft-edge/devtools-guide-chromium/media/beginners-html-edit1.msft.png",
+  "https://docs.microsoft.com/zh-cn/microsoft-edge/devtools-guide-chromium/media/bing-devtools-send-feedback.msft.png"
+]
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    < Carousel srcs={testSrcs} />
   </React.StrictMode>,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
