@@ -1,3 +1,48 @@
 .container {
+  position: relative;
+  /* display: flex; */
+  height: 130px;
+  overflow: hidden;
+  margin: auto;
+}
+.item_container {
+  width: 100%;
+  height: 130px;
+
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+
+  /* background-color: aqua; */
+}
+
+.item_container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.arrow_right {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  position: absolute;
+  border-left: 10px solid green;
+}
+.animated {
+  transition: 0.4s ease-in-out;
+}
+.arrow_left {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  position: absolute;
+  border-right: 10px solid blue;
+}
+
+.slide_track {
+  height: 130px;
   display: flex;
 }
