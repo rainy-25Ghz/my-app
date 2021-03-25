@@ -22,29 +22,6 @@ interface SlideTrackStyle {
   transition: string;
   transform: string;
 }
-function calculateStyleForSlideTrack(
-  currentIndex: number,
-  itemWidth: number,
-  length: number
-): SlideTrackStyle {
-  // {
-  //   width: itemWidth * srcs.length,
-  //   transition: "0.5s ease-in-out",
-  //   transform: `translateX(${calculateX(currentIndex,itemWidth,srcs.length)}px)`,
-  // }
-  console.log(currentIndex);
-  if (currentIndex === length)
-    return {
-      width: itemWidth * length,
-      transition: "none",
-      transform: `translateX(${0 * itemWidth}px)`,
-    };
-  return {
-    width: itemWidth * length,
-    transition: "0.5s ease-in-out",
-    transform: `translateX(${-currentIndex * itemWidth}px)`,
-  };
-}
 
 const Carousel: React.FC<propsForCarousel> = ({
   srcs,
@@ -52,32 +29,60 @@ const Carousel: React.FC<propsForCarousel> = ({
   itemWidth = 300,
   itemHeight = 200,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [translateX, setTranslateX] = useState(-itemWidth);
+  const [mysrcs, setMysrcs] = useState([""]);
+  let slide_track = React.useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let length = srcs.length;
+    setMysrcs([srcs[length - 1], ...srcs, srcs[0]]);
+  }, [srcs]);
   useEffect(() => {
     let id: NodeJS.Timeout = setInterval(() => {
-      setCurrentIndex((currentIndex) => (currentIndex + 1) % (srcs.length + 1));
+      setTranslateX((translateX) => {
+        let temp = translateX - itemWidth;
+        if (temp === -mysrcs.length * itemWidth) {
+          temp = -2 * itemWidth;
+        }
+        if (temp === -mysrcs.length * itemWidth + itemWidth)
+          setTimeout(() => {
+            if (slide_track.current?.style) {
+              slide_track.current.style.transition = "none";
+              slide_track.current.style.transform = `translateX(${-itemWidth}px)`;
+              setTimeout(() => {
+                console.log("immediate");
+                if (slide_track.current?.style)
+                  slide_track.current.style.transition = "0.3s ease-in-out";
+              }, 0);
+            }
+          }, 400);
+        return temp;
+      });
     }, 2000);
     return () => {
       clearInterval(id);
     };
-  }, []);
+  }, [mysrcs.length, itemWidth]);
   return (
     <div className={styles.container} style={{ width: itemWidth }}>
       <div
+        ref={slide_track}
         className={styles.slide_track}
-        style={calculateStyleForSlideTrack(
-          currentIndex,
-          itemWidth,
-          srcs.length
-        )}
+        style={{
+          width: itemWidth * mysrcs.length,
+          transition: "0.3s ease-in-out",
+          transform: `translateX(${translateX}px)`,
+        }}
+        // style={calculateStyleForSlideTrack(
+        //   currentIndex,
+        //   itemWidth,
+        //   srcs.length
+        // )}
       >
-        {srcs.map((src, index) => {
-          let style = {};
-          if (currentIndex === srcs.length && index === 0)
-            style = { transform: `translateX(${srcs.length * itemWidth}px)` };
+        {mysrcs.map((src, index) => {
           return (
-            <div className={styles.item_container} style={style}>
+            <div className={styles.item_container}>
               <img src={src} alt="img fails to load"></img>
+              <h1>{index}</h1>
             </div>
           );
         })}
