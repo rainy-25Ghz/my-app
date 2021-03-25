@@ -46,6 +46,7 @@ const Carousel: React.FC<propsForCarousel> = ({
         if (temp === -mysrcs.length * itemWidth + itemWidth)
           setTimeout(() => {
             if (slide_track.current?.style) {
+              //右移时取消动画！
               slide_track.current.style.transition = "none";
               slide_track.current.style.transform = `translateX(${-itemWidth}px)`;
               setTimeout(() => {
